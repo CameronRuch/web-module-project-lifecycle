@@ -7,7 +7,7 @@ const URL = 'http://localhost:9000/api/todos'
 
 const initialState = {
   successMessage: '',
-  todos : [],
+  todos: [],
 }
 
 export default class App extends React.Component {
@@ -15,7 +15,7 @@ export default class App extends React.Component {
     super(props);
     this.state = initialState
   }
-  
+
   getTodos = () => {
     axios.get(URL)
       .then(res => {
@@ -49,35 +49,38 @@ export default class App extends React.Component {
       })
       .catch(err => {
         this.setState({
-         ...this.state, 
-         errorMessage: err.response.data.message,
-       })
+          ...this.state,
+          errorMessage: err.response.data.message,
+        })
       })
   }
 
   handleCompleted = () => {
     this.setState({
       ...this.state, todos: this.state.todos.filter(todo => {
-        return  (todo.completed === false)
+        return (todo.completed === false)
       })
     })
   }
 
   handleToggle = (clickedId) => {
-    this.setState({
-      ...this.state, 
-      todos: this.state.todos.map(todo => {
-        if (todo.id === clickedId) {
-          return {
-            ...todo, completed: !todo.completed
-          }
-        } 
-          return todo
-        
+    axios.patch(`${URL}/${clickedId}`)
+      .then(res => {
+        this.setState({
+          ...this.state,
+          todos: this.state.todos.map(todo => {
+            if (todo.id === clickedId) {
+              return {
+                ...todo, completed: !todo.completed
+              }
+            }
+            return todo
+      })
       })
     })
+
   }
-    
+
 
   render() {
     const { todos } = this.state;
@@ -85,7 +88,7 @@ export default class App extends React.Component {
       <div>
         <h1>Todos:</h1>
         <TodoList handleToggle={this.handleToggle} todos={todos} />
-        <Form handleNew={this.handleNew}/>
+        <Form handleNew={this.handleNew} />
         <button onClick={this.handleCompleted}>Clear Completed</button>
       </div>
     )

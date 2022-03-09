@@ -8,7 +8,7 @@ handleClick = () => {
 
   render() {
     return (
-      <li onClick={this.handleClick}>{this.props.todo.name} {this.props.todo.completed?<span> - completed</span>:<span></span>}
+      <li onClick={ this.handleClick }>{ this.props.todo.name } { this.props.todo.completed ? '- Completed!' : '' }
       </li>
     )
   }
